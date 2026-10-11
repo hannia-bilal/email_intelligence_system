@@ -1,6 +1,8 @@
 
 # Enviroment Variables
 .env
+backend/client_secret.json
+backend/.gmail_token.json
 
 
 __pycache__/

@@ -429,6 +429,49 @@ The system is expected to provide REST APIs for:
 - Notifications
 - Analytics
 
+### Gmail integration API
+
+The backend exposes a Gmail OAuth integration and REST API under `backend/app/`:
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /auth/google/url` | Start Gmail OAuth and return Google's authorization URL. |
+| `GET /auth/google/callback` | Complete OAuth and save the authorized token locally. |
+| `GET /emails` | List emails fetched or manually added during this server process. |
+| `GET /emails/{email_id}` | Retrieve one email. |
+| `POST /emails` | Add a manual test email without connecting Gmail. |
+| `POST /emails/import` | Upload `.eml`, `.csv`, or `.json` email data (5 MB max). |
+| `POST /emails/paste` | Parse pasted RFC 822 email text. |
+| `POST /emails/sync` | Fetch up to 100 recent Gmail messages (default 25). |
+| `POST /emails/{email_id}/analyze` | Pass an email to the AI analysis pipeline and return its analysis. |
+| `POST /emails/send` | Send an email; the request must include `"approved": true`. |
+
+To configure Gmail, enable the Gmail API in a Google Cloud project, create a
+Google OAuth client for a web application, and add the callback URL below as an
+authorized redirect URI. Keep the downloaded OAuth client file private. Copy
+`backend/.env.example` to `backend/.env`, set `GOOGLE_CLIENT_SECRETS_FILE` to
+the client JSON path and set `GEMINI_API_KEY` if AI analysis is required. The
+OAuth client file and saved token are excluded from Git.
+
+Install backend dependencies and run from the repository root:
+
+```bash
+python -m pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload --env-file backend/.env
+```
+
+The default OAuth redirect URI is
+`http://localhost:8000/auth/google/callback`; configure the same URI in Google
+Cloud and in `GOOGLE_REDIRECT_URI`. Open `/docs`, request
+`GET /auth/google/url`, and follow the returned URL to authorize Gmail before
+calling the sync or send endpoints. Emails are kept in memory for the lifetime
+of the backend process; connect the database module when persistence is ready.
+Manual email creation and API tests do not require Gmail credentials.
+CSV imports must contain the `email_id`, `sender`, `receiver`, `subject`,
+`body`, and `date` columns. JSON imports accept either a list of those email
+objects or an object with an `emails` list. The Gmail provider is optional for
+the internship's local test-data workflow.
+
 ---
 
 ## Database Design
