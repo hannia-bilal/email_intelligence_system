@@ -1,0 +1,31 @@
+# ------------------------------------------------------------
+# MailMind – AI Email Intelligence (Frontend) – requirements
+# ------------------------------------------------------------
+# This is a Node.js project, so dependencies are installed with npm
+# (not pip). Everything below is already declared in package.json;
+# running `npm install` installs all of it automatically.
+
+# --- System requirements -------------------------------------
+node >= 18.0.0        # tested on Node 22
+npm  >= 9.0.0
+
+# --- Runtime dependencies ------------------------------------
+react ^18.3.1
+react-dom ^18.3.1
+react-router-dom ^6.28.0   # routing
+recharts ^2.13.3           # dashboard & analytics charts
+lucide-react ^0.460.0      # icons
+zustand ^5.0.1             # state management
+
+# --- Dev / build dependencies --------------------------------
+vite ^5.4.11
+@vitejs/plugin-react ^4.3.4
+typescript ^5.6.3
+tailwindcss ^3.4.15
+postcss ^8.4.49
+autoprefixer ^10.4.20
+@types/react ^18.3.12
+@types/react-dom ^18.3.1
+
+# --- Install -------------------------------------------------
+# npm install
